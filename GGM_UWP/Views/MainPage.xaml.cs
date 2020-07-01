@@ -26,5 +26,10 @@ namespace GGM_UWP.Views
         {
             this.InitializeComponent();
         }
+
+        private void ShowPlatformsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

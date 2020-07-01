@@ -9,6 +9,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <Button x:Name="ShowPlatformsPageButton" Content="Platforms" Click="ShowPlatformsPageButton_Click"/>
     </Grid>
 </Page>
