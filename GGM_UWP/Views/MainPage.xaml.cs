@@ -54,6 +54,21 @@ namespace GGM_UWP.Views
 
         }
 
+        private void AddPlatformButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(String propertyName)
         {

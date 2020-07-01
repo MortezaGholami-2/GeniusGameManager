@@ -19,6 +19,7 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Style="{StaticResource TitleTextBlockStyle}"/>
+                <Button x:Name="AddPlatformButton" Content="Add a Platform" Click="AddPlatformButton_Click"/>
                 <!--<TextBlock Text="General Settings" FontSize="24" Style="{StaticResource TitleTextBlockStyle}"/>
                 <Button x:Name="DeleteSettingsButton" Content="Delete Settings" Click="DeleteSettingsButton_Click"/>-->
                 <!-- *************************************** -->

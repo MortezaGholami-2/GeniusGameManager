@@ -46,12 +46,12 @@ namespace GGM_UWP.Services
             await CreatDatabaseIfNotExist();
             await CreateDatabaseTablesIfNotExist();
             //await FillDatabaseWithDefaultData();
-            await SaveDummyDataInDatabase();
+            //await SaveDummyDataInDatabase();
         }
 
 
         // *************** VideoFolder table database commands ***********************************
-        #region VideoFolders Table Database Commands
+        #region Platforms Table Database Commands
 
         public static async Task<ObservableCollection<Platform>> GetPlatforms()
         {
@@ -71,7 +71,8 @@ namespace GGM_UWP.Services
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
-                        ReleaseDate = Convert.ToDateTime(reader.GetString(2)),
+                        //ReleaseDate = Convert.ToDateTime(reader.GetString(2)),
+                        ReleaseDate = DateTime.Now,
                         Developer = reader.GetString(3),
                         Manufacturer = reader.GetString(4),
                         MaxControllers = reader.GetInt32(5),
@@ -521,7 +522,7 @@ namespace GGM_UWP.Services
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS Platforms(" +
                     @"ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     @"PlatformName TEXT NOT NULL," +
-                    @"ReleaseDate TEXT NOT NULL," +
+                    @"ReleaseDate TEXT," +
                     @"Developer TEXT NOT NULL," +
                     @"Manufacturer TEXT NOT NULL," +
                     @"MaxControllers INTEGER NOT NULL," +
@@ -611,25 +612,26 @@ namespace GGM_UWP.Services
 
                 // ******** Create dummy data in Platforms Data Table *****************************
                 SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
+
                 // ***********************************************************************************
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
+                await NotificationService.DisplaySimpleMessageDialog("", error.Message);
                 throw;
             }
         }
