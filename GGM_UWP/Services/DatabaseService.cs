@@ -7,9 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
-using GMM_ClassLibraryStandard.Models;
 
-namespace GMM_UWP.Services.Database
+using GGM_ClassLibraryStandard.Models;
+
+namespace GGM_UWP.Services
 {
     /* Install SQLite for Universal Windows Platform from Visual Studio Marketplace in Extensions
      * menu, Manage Extensions.
@@ -44,15 +45,15 @@ namespace GMM_UWP.Services.Database
         {
             await CreatDatabaseIfNotExist();
             await CreateDatabaseTablesIfNotExist();
-            await FillDatabaseWithDefaultData();
-            //await SaveDummyDataInDatabase();
+            //await FillDatabaseWithDefaultData();
+            await SaveDummyDataInDatabase();
         }
 
 
         // *************** VideoFolder table database commands ***********************************
         #region VideoFolders Table Database Commands
 
-        public static async Task<ObservableCollection<VideoFolder>> GetVideoFolders()
+        public static async Task<ObservableCollection<Platform>> GetPlatforms()
         {
             try
             {
@@ -60,167 +61,32 @@ namespace GMM_UWP.Services.Database
                 await connection.OpenAsync();
 
                 SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = @"SELECT * FROM VideoFolders";
+                command.CommandText = @"SELECT * FROM Platforms";
 
                 SQLiteDataReader reader = command.ExecuteReader();
-                ObservableCollection<VideoFolder> videoFolders = new ObservableCollection<VideoFolder>();
+                ObservableCollection<Platform> platforms = new ObservableCollection<Platform>();
                 while (reader.Read())
                 {
-                    videoFolders.Add(new VideoFolder()
+                    platforms.Add(new Platform()
                     {
                         Id = reader.GetInt32(0),
-                        FolderPath = reader.GetString(1),
-                        ContentType = reader.GetString(2),
-                        IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
-                        FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
+                        Name = reader.GetString(1),
+                        ReleaseDate = Convert.ToDateTime(reader.GetString(2)),
+                        Developer = reader.GetString(3),
+                        Manufacturer = reader.GetString(4),
+                        MaxControllers = reader.GetInt32(5),
+                        Cpu = reader.GetString(6),
+                        Memory = reader.GetString(7),
+                        Graphics = reader.GetString(8),
+                        Sound = reader.GetString(9),
+                        Display = reader.GetString(10),
+                        Media = reader.GetString(11),
+                        Notes = reader.GetString(12)
+                        //IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
+                        //FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
                     });
                 }
-                return videoFolders;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// This method get list of all video folders in database (Morteza).
-        /// </summary>
-        /// <returns>Returns enumerable list of video folders (Morteza).</returns>
-        public static async Task<ObservableCollection<VideoFolder>> GetVideoFolders(string contentType)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
-
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"SELECT * FROM VideoFolders WHERE ContentType = '{contentType}'";
-
-                SQLiteDataReader reader = command.ExecuteReader();
-                ObservableCollection<VideoFolder> videoFolders = new ObservableCollection<VideoFolder>();
-                while (reader.Read())
-                {
-                    videoFolders.Add(new VideoFolder()
-                    {
-                        Id = reader.GetInt32(0),
-                        FolderPath = reader.GetString(1),
-                        ContentType = reader.GetString(2),
-                        IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
-                        FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
-                    });
-                }
-                return videoFolders;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public static async Task<ObservableCollection<VideoFolder>> GetVideoFolders(string contentType, bool includeInLibrary)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
-
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"SELECT * FROM VideoFolders WHERE ContentType = '{contentType}' AND IncludeInLibrary = '{Convert.ToInt32(includeInLibrary)}'";
-
-                SQLiteDataReader reader = command.ExecuteReader();
-                ObservableCollection<VideoFolder> videoFolders = new ObservableCollection<VideoFolder>();
-                while (reader.Read())
-                {
-                    videoFolders.Add(new VideoFolder()
-                    {
-                        Id = reader.GetInt32(0),
-                        FolderPath = reader.GetString(1),
-                        ContentType = reader.GetString(2),
-                        IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
-                        FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
-                    });
-                }
-                return videoFolders;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public static async Task<VideoFolder> GetVideoFolderByFolderPath(string folderPath)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
-
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"SELECT * FROM VideoFolders WHERE FolderPath = '{folderPath}'";
-
-                SQLiteDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    VideoFolder videoFolder = new VideoFolder()
-                    {
-                        Id = reader.GetInt32(0),
-                        FolderPath = reader.GetString(1),
-                        ContentType = reader.GetString(2),
-                        IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
-                        FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
-                    };
-                    return videoFolder;
-                }
-                return default;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// This method adds a video folder to "VideoFolder" table in database (Morteza).
-        /// </summary>
-        /// <param name="videoFolderPath"></param>
-        /// <param name="includeInLibrary"></param>
-        public static async Task AddVideoFolder(string videoFolderPath, string contentType, bool includeInLibrary, bool folderChangeTrackerEnabled)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
-
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"INSERT INTO VideoFolders('FolderPath', 'ContentType', 'IncludeInLibrary', 'FolderChangeTrackerEnabled') " +
-                     $"VALUES('{videoFolderPath}', '{contentType}', {Convert.ToInt32(includeInLibrary)}, {Convert.ToInt32(folderChangeTrackerEnabled)})";
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public static async Task<bool> IsVideoFolderExistInDatabase(string folderPath)
-        {
-            try
-            {
-                VideoFolder videoFolder = await GetVideoFolderByFolderPath(folderPath);
-                if (videoFolder != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return platforms;
             }
             catch (Exception)
             {
@@ -228,49 +94,193 @@ namespace GMM_UWP.Services.Database
             }
         }
 
-        public static async Task UpdateVideoFolder(VideoFolder videoFolder)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
+        ///// <summary>
+        ///// This method get list of all video folders in database (Morteza).
+        ///// </summary>
+        ///// <returns>Returns enumerable list of video folders (Morteza).</returns>
+        //public static async Task<ObservableCollection<VideoFolder>> GetVideoFolders(string contentType)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
 
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"UPDATE VideoFolders SET IncludeInLibrary = {Convert.ToInt32(videoFolder.IncludeInLibrary)}, FolderChangeTrackerEnabled = {Convert.ToInt32(videoFolder.FolderChangeTrackerEnabled)} " +
-                     $"WHERE FolderPath = '{videoFolder.FolderPath}'";
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"SELECT * FROM VideoFolders WHERE ContentType = '{contentType}'";
 
-                throw;
-            }
-        }
+        //        SQLiteDataReader reader = command.ExecuteReader();
+        //        ObservableCollection<VideoFolder> videoFolders = new ObservableCollection<VideoFolder>();
+        //        while (reader.Read())
+        //        {
+        //            videoFolders.Add(new VideoFolder()
+        //            {
+        //                Id = reader.GetInt32(0),
+        //                FolderPath = reader.GetString(1),
+        //                ContentType = reader.GetString(2),
+        //                IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
+        //                FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
+        //            });
+        //        }
+        //        return videoFolders;
+        //    }
+        //    catch (Exception)
+        //    {
 
-        /// <summary>
-        /// This method will remove a video folder from database (Morteza).
-        /// </summary>
-        /// <param name="videoFolder">A video folder that you want to delete from database (Morteza).</param>
-        public static async Task DeleteVideoFolder(VideoFolder videoFolder)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
+        //        throw;
+        //    }
+        //}
 
-                //VideoFolder deletedVideoFolder = await GetVideoFolderByFolderPath(videoFolder.FolderPath);
+        //public static async Task<ObservableCollection<VideoFolder>> GetVideoFolders(string contentType, bool includeInLibrary)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
 
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"DELETE FROM VideoFolders WHERE FolderPath = '{videoFolder.FolderPath}'";
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"SELECT * FROM VideoFolders WHERE ContentType = '{contentType}' AND IncludeInLibrary = '{Convert.ToInt32(includeInLibrary)}'";
 
-                throw;
-            }
+        //        SQLiteDataReader reader = command.ExecuteReader();
+        //        ObservableCollection<VideoFolder> videoFolders = new ObservableCollection<VideoFolder>();
+        //        while (reader.Read())
+        //        {
+        //            videoFolders.Add(new VideoFolder()
+        //            {
+        //                Id = reader.GetInt32(0),
+        //                FolderPath = reader.GetString(1),
+        //                ContentType = reader.GetString(2),
+        //                IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
+        //                FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
+        //            });
+        //        }
+        //        return videoFolders;
+        //    }
+        //    catch (Exception)
+        //    {
 
-        }
+        //        throw;
+        //    }
+        //}
+
+        //public static async Task<VideoFolder> GetVideoFolderByFolderPath(string folderPath)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
+
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"SELECT * FROM VideoFolders WHERE FolderPath = '{folderPath}'";
+
+        //        SQLiteDataReader reader = command.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            VideoFolder videoFolder = new VideoFolder()
+        //            {
+        //                Id = reader.GetInt32(0),
+        //                FolderPath = reader.GetString(1),
+        //                ContentType = reader.GetString(2),
+        //                IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
+        //                FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
+        //            };
+        //            return videoFolder;
+        //        }
+        //        return default;
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// This method adds a video folder to "VideoFolder" table in database (Morteza).
+        ///// </summary>
+        ///// <param name="videoFolderPath"></param>
+        ///// <param name="includeInLibrary"></param>
+        //public static async Task AddVideoFolder(string videoFolderPath, string contentType, bool includeInLibrary, bool folderChangeTrackerEnabled)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
+
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"INSERT INTO VideoFolders('FolderPath', 'ContentType', 'IncludeInLibrary', 'FolderChangeTrackerEnabled') " +
+        //             $"VALUES('{videoFolderPath}', '{contentType}', {Convert.ToInt32(includeInLibrary)}, {Convert.ToInt32(folderChangeTrackerEnabled)})";
+        //        command.ExecuteNonQuery();
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+
+        //public static async Task<bool> IsVideoFolderExistInDatabase(string folderPath)
+        //{
+        //    try
+        //    {
+        //        VideoFolder videoFolder = await GetVideoFolderByFolderPath(folderPath);
+        //        if (videoFolder != null)
+        //        {
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public static async Task UpdateVideoFolder(VideoFolder videoFolder)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
+
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"UPDATE VideoFolders SET IncludeInLibrary = {Convert.ToInt32(videoFolder.IncludeInLibrary)}, FolderChangeTrackerEnabled = {Convert.ToInt32(videoFolder.FolderChangeTrackerEnabled)} " +
+        //             $"WHERE FolderPath = '{videoFolder.FolderPath}'";
+        //        command.ExecuteNonQuery();
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// This method will remove a video folder from database (Morteza).
+        ///// </summary>
+        ///// <param name="videoFolder">A video folder that you want to delete from database (Morteza).</param>
+        //public static async Task DeleteVideoFolder(VideoFolder videoFolder)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
+
+        //        //VideoFolder deletedVideoFolder = await GetVideoFolderByFolderPath(videoFolder.FolderPath);
+
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"DELETE FROM VideoFolders WHERE FolderPath = '{videoFolder.FolderPath}'";
+        //        command.ExecuteNonQuery();
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+
+        //}
 
         #endregion
         // ***************************************************************************************
@@ -278,24 +288,24 @@ namespace GMM_UWP.Services.Database
         // *************** Movies table database commands ****************************************
         #region Movies Table Database Commands
 
-        public static async Task AddMovie(string title, string tagLine, string plot, DateTime releaseDate, int runtime)
-        {
-            try
-            {
-                SQLiteConnection connection = new SQLiteConnection(connectionString);
-                await connection.OpenAsync();
+        //public static async Task AddMovie(string title, string tagLine, string plot, DateTime releaseDate, int runtime)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
+        //        await connection.OpenAsync();
 
-                SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"INSERT INTO Movies('Title', 'TagLine', 'Plot', 'ReleaseDate', 'Runtime') " +
-                     $"VALUES('{title}', '{tagLine}', '{plot}', '{Convert.ToString(releaseDate)}', {runtime})";
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
+        //        SQLiteCommand command = new SQLiteCommand(connection);
+        //        command.CommandText = $"INSERT INTO Movies('Title', 'TagLine', 'Plot', 'ReleaseDate', 'Runtime') " +
+        //             $"VALUES('{title}', '{tagLine}', '{plot}', '{Convert.ToString(releaseDate)}', {runtime})";
+        //        command.ExecuteNonQuery();
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
         #endregion
         // ***************************************************************************************
@@ -599,21 +609,21 @@ namespace GMM_UWP.Services.Database
                 SQLiteConnection connection = new SQLiteConnection(connectionString);
                 await connection.OpenAsync();
 
-                // ******** Create dummy data in VideoFolders Data Table *****************************
+                // ******** Create dummy data in Platforms Data Table *****************************
                 SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = "INSERT INTO VideoFolders(FolderPath, ContentType, IncludeInLibrary, FolderChangeTrackerEnabled) VALUES('c:\\Audi', 'MovieFolder', 1, 1)";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO VideoFolders(FolderPath, ContentType, IncludeInLibrary, FolderChangeTrackerEnabled) VALUES('s:\\fsfsd', 'MovieFolder', 1, 0)";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO VideoFolders(FolderPath, ContentType, IncludeInLibrary, FolderChangeTrackerEnabled) VALUES('d:\\TVShdsfsdfowsi', 'TVShowFolder', 0, 1)";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO VideoFolders(FolderPath, ContentType, IncludeInLibrary, FolderChangeTrackerEnabled) VALUES('a:\\nmbnnmAudi', 'AdultVideoFolder', 1, 1)";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO VideoFolders(FolderPath, ContentType, IncludeInLibrary, FolderChangeTrackerEnabled) VALUES('c:\\Audjkhjkhi', 'TVShowFolder', 1, 0)";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', 'MovieFolder', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs, 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
                 // ***********************************************************************************
             }

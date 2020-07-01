@@ -163,6 +163,12 @@
       <Name>SQLite for Universal Windows Platform</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GGM_ClassLibraryStandard\GGM_ClassLibraryStandard.csproj">
+      <Project>{7a2db545-ccd9-4904-9d3a-5da351c3173f}</Project>
+      <Name>GGM_ClassLibraryStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
