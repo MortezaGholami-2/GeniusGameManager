@@ -50,7 +50,7 @@ namespace GGM_UWP.Services
         }
 
 
-        // *************** VideoFolder table database commands ***********************************
+        // *************** Platforms table database commands ***********************************
         #region Platforms Table Database Commands
 
         public static async Task<ObservableCollection<Platform>> GetPlatforms()
@@ -195,29 +195,29 @@ namespace GGM_UWP.Services
         //    }
         //}
 
-        ///// <summary>
-        ///// This method adds a video folder to "VideoFolder" table in database (Morteza).
-        ///// </summary>
-        ///// <param name="videoFolderPath"></param>
-        ///// <param name="includeInLibrary"></param>
-        //public static async Task AddVideoFolder(string videoFolderPath, string contentType, bool includeInLibrary, bool folderChangeTrackerEnabled)
-        //{
-        //    try
-        //    {
-        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
-        //        await connection.OpenAsync();
+        /// <summary>
+        /// This method adds a platform to "Platforms" table in database (Morteza).
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        public static async Task AddPlatform(Platform platform)
+        {
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(connectionString);
+                await connection.OpenAsync();
 
-        //        SQLiteCommand command = new SQLiteCommand(connection);
-        //        command.CommandText = $"INSERT INTO VideoFolders('FolderPath', 'ContentType', 'IncludeInLibrary', 'FolderChangeTrackerEnabled') " +
-        //             $"VALUES('{videoFolderPath}', '{contentType}', {Convert.ToInt32(includeInLibrary)}, {Convert.ToInt32(folderChangeTrackerEnabled)})";
-        //        command.ExecuteNonQuery();
-        //    }
-        //    catch (Exception)
-        //    {
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) " +
+                    $"VALUES('{platform.Name}', '{platform.ReleaseDate}', '{platform.Developer}', '{platform.Manufacturer}', {platform.MaxControllers}, '{platform.Cpu}', '{platform.Memory}', '{platform.Graphics}', '{platform.Sound}', '{platform.Display}', '{platform.Media}', '{platform.Notes}')";
+                command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
 
-        //        throw;
-        //    }
-        //}
+                throw;
+            }
+        }
 
         //public static async Task<bool> IsVideoFolderExistInDatabase(string folderPath)
         //{
@@ -536,15 +536,23 @@ namespace GGM_UWP.Services
                 await command.ExecuteNonQueryAsync();
                 // ***************************************************************************
 
-                // ******** Create Movies Data Table *****************************************
-                //command = new SQLiteCommand(connection);
-                //command.CommandText = @"CREATE TABLE IF NOT EXISTS Movies(" +
-                //    @"ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                //    @"Title TEXT NOT NULL," +
-                //    @"Tagline TEXT NOT NULL," +
-                //    @"Plot TEXT NOT NULL," +
-                //    @"Runtime INTEGER NOT NULL)";
-                //await command.ExecuteNonQueryAsync();
+                // ******** Create Games Data Table ******************************************
+                command = new SQLiteCommand(connection);
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS Games(" +
+                    @"ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                    @"GameName TEXT NOT NULL," +
+                    @"AlternateName TEXT NOT NULL," +
+                    @"Platform TEXT NOT NULL," +
+                    @"ReleaseDate TEXT NOT NULL" +
+                    @"GameType TEXT NOT NULL" +
+                    @"ESRB TEXT NOT NULL" +
+                    @"Developers TEXT NOT NULL" +
+                    @"Publishers TEXT NOT NULL" +
+                    @"Genres TEXT NOT NULL" +
+                    @"MaxPlayers INTEGER NOT NULL," +
+                    @"Cooperative TEXT NOT NULL" +
+                    @"Overview TEXT NOT NULL)";
+                await command.ExecuteNonQueryAsync();
                 // ***************************************************************************
 
                 // ******** Create MovieIds Data Table *****************************************

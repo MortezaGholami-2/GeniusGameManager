@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -16,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using GGM_ClassLibraryStandard.Models;
+using GGM_ClassLibraryStandard.Scrapers;
 using GGM_UWP.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -40,6 +42,7 @@ namespace GGM_UWP.Views
             }
         }
 
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -56,8 +59,10 @@ namespace GGM_UWP.Views
 
         private void AddPlatformButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame a = this.Frame;
+            a.Navigate(typeof(AllPlatformsPage));
         }
+
 
 
 
@@ -75,5 +80,9 @@ namespace GGM_UWP.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void AddGameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

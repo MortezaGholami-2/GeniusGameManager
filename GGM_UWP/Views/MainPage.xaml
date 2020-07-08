@@ -10,16 +10,19 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded">
 
-    <Grid>
+    <Grid Margin="8">
         <ScrollViewer VerticalScrollMode="Auto">
             <StackPanel Orientation="Vertical" Spacing="12">
                 <!-- ******* Toolbar *********************** -->
                 <TextBlock Text="Toolbar"
                            FontSize="28"
-                           HorizontalAlignment="Center"
+                           HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Style="{StaticResource TitleTextBlockStyle}"/>
-                <Button x:Name="AddPlatformButton" Content="Add a Platform" Click="AddPlatformButton_Click"/>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button x:Name="AddPlatformButton" Content="Add a Platform" Click="AddPlatformButton_Click"/>
+                    <Button x:Name="AddGameButton" Content="Add a Game" Click="AddGameButton_Click"/>
+                </StackPanel>
                 <!--<TextBlock Text="General Settings" FontSize="24" Style="{StaticResource TitleTextBlockStyle}"/>
                 <Button x:Name="DeleteSettingsButton" Content="Delete Settings" Click="DeleteSettingsButton_Click"/>-->
                 <!-- *************************************** -->
@@ -32,6 +35,51 @@
                            Style="{StaticResource TitleTextBlockStyle}"/>
 
                 <ListView x:Name="PlatformsListView"
+                          ItemsSource="{x:Bind PlatformsList, Mode=OneWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Platform">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="{x:Bind Id, Mode=OneWay}" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind ReleaseDate, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind Developer, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <AppBarSeparator/>
+                                <!--<CheckBox x:Name="IncludeInMovieLibraryCheckBox"
+                                          Content="Include in library"
+                                          VerticalAlignment="Center"
+                                          IsChecked="{x:Bind IncludeInLibrary, Mode=OneWay}"
+                                          Checked="IncludeInMovieLibraryCheckBox_Checked"
+                                          Unchecked="IncludeInMovieLibraryCheckBox_Unchecked"/>
+                                <AppBarSeparator/>
+                                <CheckBox x:Name="MovieFolderChangeTrackerCheckBox"
+                                          Content="FolderChangeTracker"
+                                          VerticalAlignment="Center"
+                                          IsChecked="{x:Bind FolderChangeTrackerEnabled, Mode=OneWay}"
+                                          Checked="MovieFolderChangeTrackerCheckBox_Checked"
+                                          Unchecked="MovieFolderChangeTrackerCheckBox_Unchecked"/>
+                                <AppBarSeparator/>
+                                <Button x:Name="MovieSourcesListViewItemDeleteButton" Click="MovieSourcesListViewItemDeleteButton_Click">
+                                    <SymbolIcon Symbol="Cancel"/>
+                                </Button>-->
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- *************************************** -->
+                <TextBlock Text="" FontSize="20"/>
+                <!-- *************************************** -->
+
+                <!-- ******* Games ************************* -->
+                <TextBlock Text="Games"
+                           FontSize="24"
+                           Style="{StaticResource TitleTextBlockStyle}"/>
+
+                <ListView x:Name="GamesListView"
                           ItemsSource="{x:Bind PlatformsList, Mode=OneWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:Platform">
@@ -193,15 +241,51 @@
 
 
                 <!-- ******* Content Dialog **************** -->
-                <!--<ContentDialog x:Name="VideoFolderDialog"
-                               Title="Add a video source..."
-                               PrimaryButtonText="Save"
-                               IsPrimaryButtonEnabled="False"
+                <!--<ContentDialog x:Name="AddPlatformDialog"
+                               Title="Add a platform..."
+                               PrimaryButtonText="Add"
+                               IsPrimaryButtonEnabled="True"
                                CloseButtonText="Cancel"
                                DefaultButton="Primary"
-                               PrimaryButtonClick="VideoFolderDialog_PrimaryButtonClick">
+                               PrimaryButtonClick="AddPlatformDialog_PrimaryButtonClick">
                     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <Button x:Name="FolderPickerButton" Content="add" Click="FolderPickerButton_Click"/>
+                        <ListView x:Name="AllPlatformsListView"
+                          ItemsSource="{x:Bind AllPlatformsList, Mode=OneWay}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Platform">
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <TextBlock Text="{x:Bind Id, Mode=OneWay}" VerticalAlignment="Center"/>
+                                        <AppBarSeparator/>
+                                        <Image Source="{x:Bind PictureUrl, Mode=OneWay}" Width="100" Height="100"/>
+                                        <AppBarSeparator/>
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                        <AppBarSeparator/>
+                                        <TextBlock Text="{x:Bind ReleaseDate, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                        <AppBarSeparator/>
+                                        <TextBlock Text="{x:Bind Developer, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                        <AppBarSeparator/>
+                                        <CheckBox x:Name="IncludeInMovieLibraryCheckBox"
+                                          Content="Include in library"
+                                          VerticalAlignment="Center"
+                                          IsChecked="{x:Bind IncludeInLibrary, Mode=OneWay}"
+                                          Checked="IncludeInMovieLibraryCheckBox_Checked"
+                                          Unchecked="IncludeInMovieLibraryCheckBox_Unchecked"/>
+                                <AppBarSeparator/>
+                                <CheckBox x:Name="MovieFolderChangeTrackerCheckBox"
+                                          Content="FolderChangeTracker"
+                                          VerticalAlignment="Center"
+                                          IsChecked="{x:Bind FolderChangeTrackerEnabled, Mode=OneWay}"
+                                          Checked="MovieFolderChangeTrackerCheckBox_Checked"
+                                          Unchecked="MovieFolderChangeTrackerCheckBox_Unchecked"/>
+                                <AppBarSeparator/>
+                                <Button x:Name="MovieSourcesListViewItemDeleteButton" Click="MovieSourcesListViewItemDeleteButton_Click">
+                                    <SymbolIcon Symbol="Cancel"/>
+                                </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
+                        <!--<Button x:Name="FolderPickerButton" Content="add" Click="FolderPickerButton_Click"/>
                         <TextBox x:Name="VideoFolderPathTextBox" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
                             <RadioButton x:Name="MoviesRadioButton" Content="Movies" Checked="MoviesRadioButton_Checked"/>
@@ -209,8 +293,8 @@
                             <RadioButton x:Name="AdultsRadioButton" Content="Adults" Checked="AdultsRadioButton_Checked"/>
                         </StackPanel>
                         <CheckBox x:Name="SeparateFoldersCheckBox" Content="Separate Folders"/>
-                        <TextBlock x:Name="VideoFolderDialogResultMessage" Text="" FontStyle="Italic"/>
-                    </StackPanel>
+                        <TextBlock x:Name="VideoFolderDialogResultMessage" Text="" FontStyle="Italic"/>-->
+                    <!--</StackPanel>
                 </ContentDialog>-->
                 <!-- *************************************** -->
 

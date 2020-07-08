@@ -7,7 +7,7 @@ using GGM_ClassLibraryStandard.Interfaces;
 
 namespace GGM_ClassLibraryStandard.Models
 {
-    public class Platform : IPlatform, INotifyPropertyChanged
+    public class Game : IGame, INotifyPropertyChanged
     {
         // *********** For Database ************************
         public int Id { get; set; }
@@ -187,6 +187,166 @@ namespace GGM_ClassLibraryStandard.Models
 
 
 
+
+        //private List<MovieId> movieId;
+        //public List<MovieId> MovieId
+        //{
+        //    get { return movieId; }
+
+        //    set
+        //    {
+        //        movieId = value;
+        //        OnPropertyChanged(nameof(MovieId));
+        //    }
+        //}
+
+
+        //private string tagLine;
+        //public string TagLine
+        //{
+        //    get { return tagLine; }
+
+        //    set
+        //    {
+        //        tagLine = value;
+        //        OnPropertyChanged(nameof(TagLine));
+        //    }
+        //}
+
+        //private List<Cast> stars;
+        //public List<Cast> Stars
+        //{
+        //    get { return stars; }
+
+        //    set
+        //    {
+        //        stars = value;
+        //        OnPropertyChanged(nameof(Stars));
+        //    }
+        //}
+
+        //private List<Cast> cast;
+        //public List<Cast> Cast
+        //{
+        //    get { return cast; }
+
+        //    set
+        //    {
+        //        cast = value;
+        //        OnPropertyChanged(nameof(Cast));
+        //    }
+        //}
+
+        //private List<Crew> crew;
+        //public List<Crew> Crew
+        //{
+        //    get { return crew; }
+
+        //    set
+        //    {
+        //        crew = value;
+        //        OnPropertyChanged(nameof(Crew));
+        //    }
+        //}
+
+        //private string plot;
+        //public string Plot
+        //{
+        //    get { return plot; }
+
+        //    set
+        //    {
+        //        plot = value;
+        //        OnPropertyChanged(nameof(Plot));
+        //    }
+        //}
+
+        //private List<string> genres;
+        //public List<string> Genres
+        //{
+        //    get { return genres; }
+
+        //    set
+        //    {
+        //        genres = value;
+        //        OnPropertyChanged(nameof(Genres));
+        //    }
+        //}
+
+
+        //private int runtime;
+        //public int Runtime
+        //{
+        //    get { return runtime; }
+
+        //    set
+        //    {
+        //        runtime = value;
+        //        OnPropertyChanged(nameof(Runtime));
+        //    }
+        //}
+
+        //////public string OriginalTitle { get; set; }
+
+
+
+        //private List<string> productionCompanies;
+        //public List<string> ProductionCompanies
+        //{
+        //    get { return productionCompanies; }
+
+        //    set
+        //    {
+        //        productionCompanies = value;
+        //        OnPropertyChanged(nameof(ProductionCompanies));
+        //    }
+        //}
+        ////private string title;
+        ////public string Title
+        ////{
+        ////    get { return title; }
+
+        ////    set
+        ////    {
+        ////        title = value;
+        ////        OnPropertyChanged(nameof(Title));
+        ////    }
+        ////}
+
+        ////private string title;
+        ////public string Title
+        ////{
+        ////    get { return title; }
+
+        ////    set
+        ////    {
+        ////        title = value;
+        ////        OnPropertyChanged(nameof(Title));
+        ////    }
+        ////}
+
+
+
+        //////public List<CompanyModel> ProductionCompanies { get; set; }
+
+
+        //////public List<RatingModel> Ratings { get; set; }
+        ////public int UserRating { get; set; }
+        ////public bool Favorite { get; set; }
+        //////public List<CountryModel> Countries { get; set; }
+        ////public List<string> Languages { get; set; }
+        //////public List<CountryModel> FilmingLocation { get; set; }
+        ////public List<string> Categories { get; set; }
+        //////public List<TagModel> Tags { get; set; }
+        ////public string Series { get; set; }
+        ////public string Studio { get; set; }
+        ////public string Label { get; set; }
+        ////public List<string> Channel { get; set; }
+        ////public string ContentID { get; set; }
+        ////public string DVDID { get; set; }
+        ////movieset
+
+        ////public List<Trailer> Trailers { get; set; }
         //// *************************************************
 
         //// ************ Not For Database *******************

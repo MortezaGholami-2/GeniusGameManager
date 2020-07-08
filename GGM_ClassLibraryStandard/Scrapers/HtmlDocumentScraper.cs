@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace GGM_ClassLibraryStandard.Scrapers
@@ -15,14 +16,14 @@ namespace GGM_ClassLibraryStandard.Scrapers
             return document;
         }
 
-        public static HtmlDocument GetHtmlDocumentByWebPageUrl(string webPageUrl)
+        public static async Task<HtmlDocument> GetHtmlDocumentByWebPageUrlAsync(string webPageUrl)
         {
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             try
             {
                 HtmlWeb web = new HtmlWeb();
                 //web.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36";
-                HtmlDocument document = web.Load(webPageUrl);
+                HtmlDocument document = await web.LoadFromWebAsync(webPageUrl);
                 return document;
             }
             catch (Exception)

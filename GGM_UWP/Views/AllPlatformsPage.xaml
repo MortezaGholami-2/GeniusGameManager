@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="GGM_UWP.Views.AllPlatformsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GGM_UWP.Views"
+    xmlns:models="using:GGM_ClassLibraryStandard.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded">
+
+    <Grid>
+        <ScrollViewer VerticalScrollMode="Auto">
+            <StackPanel Orientation="Vertical">
+                <Button x:Name="SavePlatformButton" Content="Save" Click="SavePlatformButton_Click"/>
+                <TextBlock Text="{x:Bind SelectedPlatform.PlatformUrl, Mode=OneWay}"/>
+                <ListView x:Name="AllPlatformsListView"
+                          ItemsSource="{x:Bind AllPlatformsList, Mode=OneWay}"
+                          SelectedItem="{x:Bind SelectedPlatform, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Platform">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="{x:Bind Id, Mode=OneWay}" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <Image Source="{x:Bind PictureUrl, Mode=OneWay}" Width="100" Height="100"/>
+                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind ReleaseDate, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind Developer, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
