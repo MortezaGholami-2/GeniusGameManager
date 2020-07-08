@@ -12,15 +12,15 @@ namespace GGM_ClassLibraryStandard.Models
         // *********** For Database ************************
         public int Id { get; set; }
 
-        private string name;
-        public string Name
+        private string title;
+        public string Title
         {
-            get { return name; }
+            get { return title; }
 
             set
             {
-                name = value;
-                OnPropertyChanged(nameof(Name));
+                title = value;
+                OnPropertyChanged(nameof(Title));
             }
         }
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 
 using GGM_ClassLibraryStandard.Models;
+using Windows.Gaming.XboxLive.Storage;
 
 namespace GGM_UWP.Services
 {
@@ -286,40 +287,76 @@ namespace GGM_UWP.Services
         #endregion
         // ***************************************************************************************
 
-        // *************** Movies table database commands ****************************************
-        #region Movies Table Database Commands
+        // *************** Games table database commands ****************************************
+        #region Games Table Database Commands
 
-        //public static async Task AddMovie(string title, string tagLine, string plot, DateTime releaseDate, int runtime)
-        //{
-        //    try
-        //    {
-        //        SQLiteConnection connection = new SQLiteConnection(connectionString);
-        //        await connection.OpenAsync();
+        public static async Task<ObservableCollection<Game>> GetGames()
+        {
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(connectionString);
+                await connection.OpenAsync();
 
-        //        SQLiteCommand command = new SQLiteCommand(connection);
-        //        command.CommandText = $"INSERT INTO Movies('Title', 'TagLine', 'Plot', 'ReleaseDate', 'Runtime') " +
-        //             $"VALUES('{title}', '{tagLine}', '{plot}', '{Convert.ToString(releaseDate)}', {runtime})";
-        //        command.ExecuteNonQuery();
-        //    }
-        //    catch (Exception)
-        //    {
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = @"SELECT * FROM Games";
 
-        //        throw;
-        //    }
-        //}
+                SQLiteDataReader reader = command.ExecuteReader();
+                ObservableCollection<Game> games = new ObservableCollection<Game>();
+                while (reader.Read())
+                {
+                    games.Add(new Game()
+                    {
+                        Id = reader.GetInt32(0),
+                        Title = reader.GetString(1),
+                        //ReleaseDate = Convert.ToDateTime(reader.GetString(2)),
+                        //ReleaseDate = DateTime.Now,
+                        //Developer = reader.GetString(3),
+                        //Manufacturer = reader.GetString(4),
+                        //MaxControllers = reader.GetInt32(5),
+                        //Cpu = reader.GetString(6),
+                        //Memory = reader.GetString(7),
+                        //Graphics = reader.GetString(8),
+                        //Sound = reader.GetString(9),
+                        //Display = reader.GetString(10),
+                        //Media = reader.GetString(11),
+                        Notes = reader.GetString(2)
+                        //IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
+                        //FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
+                    });
+                }
+                return games;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task AddGame(Game game)
+        {
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(connectionString);
+                await connection.OpenAsync();
+
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = $"INSERT INTO Games('Title', 'Notes') " +
+                     $"VALUES('{game.Title}', '{game.Notes}')";
+                     //$", '{plot}', '{Convert.ToString(releaseDate)}', {runtime})";
+                command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         #endregion
         // ***************************************************************************************
 
 
 
-        // *************** VideoFolder table database commands ***********************************
-        // *************** VideoFolder table database commands ***********************************
-        // *************** VideoFolder table database commands ***********************************
-        // *************** VideoFolder table database commands ***********************************
-        // *************** VideoFolder table database commands ***********************************
-        // *************** VideoFolder table database commands ***********************************
-        // *************** VideoFolder table database commands ***********************************
 
         // ******************** Videos table database commands ***********************************
         /// <summary>
@@ -540,18 +577,18 @@ namespace GGM_UWP.Services
                 command = new SQLiteCommand(connection);
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS Games(" +
                     @"ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    @"GameName TEXT NOT NULL," +
-                    @"AlternateName TEXT NOT NULL," +
-                    @"Platform TEXT NOT NULL," +
-                    @"ReleaseDate TEXT NOT NULL" +
-                    @"GameType TEXT NOT NULL" +
-                    @"ESRB TEXT NOT NULL" +
-                    @"Developers TEXT NOT NULL" +
-                    @"Publishers TEXT NOT NULL" +
-                    @"Genres TEXT NOT NULL" +
-                    @"MaxPlayers INTEGER NOT NULL," +
-                    @"Cooperative TEXT NOT NULL" +
-                    @"Overview TEXT NOT NULL)";
+                    @"Title TEXT NOT NULL," +
+                //    @"AlternateName TEXT NOT NULL," +
+                //    @"Platform TEXT NOT NULL," +
+                //    @"ReleaseDate TEXT NOT NULL" +
+                //    @"GameType TEXT NOT NULL" +
+                //    @"ESRB TEXT NOT NULL" +
+                //    @"Developers TEXT NOT NULL" +
+                //    @"Publishers TEXT NOT NULL" +
+                //    @"Genres TEXT NOT NULL" +
+                //    @"MaxPlayers INTEGER NOT NULL," +
+                //    @"Cooperative TEXT NOT NULL" +
+                    @"Notes TEXT NOT NULL)";
                 await command.ExecuteNonQueryAsync();
                 // ***************************************************************************
 
@@ -625,16 +662,15 @@ namespace GGM_UWP.Services
 
                 command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
                 command.ExecuteNonQuery();
+                // ***********************************************************************************
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                // ******** Create dummy data in Platforms Data Table *****************************
+                command = new SQLiteCommand(connection);
+                command.CommandText = "INSERT INTO Games(Title, Notes) VALUES('mort', 'fgdfg')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Games(Title, Notes) VALUES('mort', 'fgdfg')";
                 command.ExecuteNonQuery();
-
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
-                command.ExecuteNonQuery();
-
                 // ***********************************************************************************
             }
             catch (Exception error)

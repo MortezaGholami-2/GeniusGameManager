@@ -10,40 +10,40 @@ namespace GGM_ClassLibraryStandard.Interfaces
     {
         int Id { get; set; }
         string Title { get; set; }
-        string SortTitle { get; set; }
-        int LaunchBoxId { get; set; }
-        List<AlternateTitle> AlternateTitles { get; set; }
-        DateTime ReleaseDate { get; set; }
-        string ESRB { get; set; }
-        List<Genre> Genres { get; set; }
-        string PlatformId { get; set; }
-        string Developers { get; set; }
-        string Publishers { get; set; }
-        string Series { get; set; }
-        Region Region { get; set; }
-        string PlayMode { get; set; }
-        string Version { get; set; }
-        string Status { get; set; }
-        string Source { get; set;}
-        DateTime GameAdded { get; set; }
-        DateTime LastPlayed { get; set; }
-        string Rating { get; set; }
-        int PlayCount { get; set; }
-        bool IsFavorite { get; set; }
-        bool IsPortable { get; set; }
-        bool IsComplete { get; set; }
-        bool IsHidden { get; set; }
-        bool IsBroken { get; set; }
-        bool IsInstalled { get; set; }
+        //string SortTitle { get; set; }
+        //int LaunchBoxId { get; set; }
+        //List<AlternateTitle> AlternateTitles { get; set; }
+        //DateTime ReleaseDate { get; set; }
+        //string ESRB { get; set; }
+        //List<Genre> Genres { get; set; }
+        //string PlatformId { get; set; }
+        //string Developers { get; set; }
+        //string Publishers { get; set; }
+        //string Series { get; set; }
+        //Region Region { get; set; }
+        //string PlayMode { get; set; }
+        //string Version { get; set; }
+        //string Status { get; set; }
+        //string Source { get; set;}
+        //DateTime GameAdded { get; set; }
+        //DateTime LastPlayed { get; set; }
+        //string Rating { get; set; }
+        //int PlayCount { get; set; }
+        //bool IsFavorite { get; set; }
+        //bool IsPortable { get; set; }
+        //bool IsComplete { get; set; }
+        //bool IsHidden { get; set; }
+        //bool IsBroken { get; set; }
+        //bool IsInstalled { get; set; }
         string Notes { get; set; }
 
-        string GamePath { get; set; }
-        string ManualPath { get; set; }
+        //string GamePath { get; set; }
+        //string ManualPath { get; set; }
 
-        string GameType { get; set; }
-        int MaxPlayers { get; set; }
-        string Cooperative { get; set; }
-        string GameUrl { get; set; }
+        //string GameType { get; set; }
+        //int MaxPlayers { get; set; }
+        //string Cooperative { get; set; }
+        //string GameUrl { get; set; }
         
 
         //List<MovieId> MovieId { get; set; }

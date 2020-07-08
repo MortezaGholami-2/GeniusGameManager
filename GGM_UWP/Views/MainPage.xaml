@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GGM_UWP.Views"
+    xmlns:windowsStorageAccessCache="using:Windows.Storage.AccessCache"
     xmlns:models="using:GGM_ClassLibraryStandard.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -22,6 +23,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <Button x:Name="AddPlatformButton" Content="Add a Platform" Click="AddPlatformButton_Click"/>
                     <Button x:Name="AddGameButton" Content="Add a Game" Click="AddGameButton_Click"/>
+                    <Button x:Name="ImportGameButton" Content="Import a Game" Click="ImportGameButton_Click"/>
                 </StackPanel>
                 <!--<TextBlock Text="General Settings" FontSize="24" Style="{StaticResource TitleTextBlockStyle}"/>
                 <Button x:Name="DeleteSettingsButton" Content="Delete Settings" Click="DeleteSettingsButton_Click"/>-->
@@ -80,18 +82,15 @@
                            Style="{StaticResource TitleTextBlockStyle}"/>
 
                 <ListView x:Name="GamesListView"
-                          ItemsSource="{x:Bind PlatformsList, Mode=OneWay}">
+                          ItemsSource="{x:Bind GamesList, Mode=OneWay}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Platform">
+                        <DataTemplate x:DataType="models:Game">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="{x:Bind Id, Mode=OneWay}" VerticalAlignment="Center"/>
                                 <AppBarSeparator/>
-                                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Title, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
                                 <AppBarSeparator/>
-                                <TextBlock Text="{x:Bind ReleaseDate, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
-                                <AppBarSeparator/>
-                                <TextBlock Text="{x:Bind Developer, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
-                                <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind Notes, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
                                 <AppBarSeparator/>
                                 <!--<CheckBox x:Name="IncludeInMovieLibraryCheckBox"
                                           Content="Include in library"
@@ -299,8 +298,13 @@
                 <!-- *************************************** -->
 
                 <!-- ******* Must delete later ******************* -->
-                <!--<TextBlock Text="Other Settings" FontSize="24" Style="{StaticResource TitleTextBlockStyle}"/>
-                <TextBlock Text="Future Access List"/>
+                <TextBlock Text="Access List Entries"
+                           FontSize="24"
+                           Style="{StaticResource TitleTextBlockStyle}"/>
+
+                <Button x:Name="EmptyFutureAccessList" Content="Empty Future Access List" Click="EmptyFutureAccessList_Click"/>
+                <TextBlock x:Name="FutureAccessListTextBlock"/>
+
                 <ListView x:Name="Futureaccesslistview" ItemsSource="{x:Bind FutureAccessListEntries, Mode=OneWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="windowsStorageAccessCache:AccessListEntry">
@@ -308,10 +312,9 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Button x:Name="EmptyFutureAccessList" Content="Empty Future Access List" Click="EmptyFutureAccessList_Click"/>
-                <TextBlock x:Name="FutureAccessListMessage"/>-->
+                
                 <!-- *************************************** -->
-                <!--<TextBlock Text="" FontSize="20"/>-->
+                <TextBlock Text="" FontSize="20"/>
                 <!-- ********************************************* -->
 
                 <!-- ******* Library Settings ************** -->

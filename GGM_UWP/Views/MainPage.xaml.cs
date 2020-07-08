@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage.AccessCache;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,6 +31,20 @@ namespace GGM_UWP.Views
     public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
 
+        // ========== must delete later ==========================
+        private ObservableCollection<AccessListEntry> futureAccessListEntries;
+        public ObservableCollection<AccessListEntry> FutureAccessListEntries
+        {
+            get { return futureAccessListEntries; }
+
+            set
+            {
+                futureAccessListEntries = value;
+                OnPropertyChanged(nameof(FutureAccessListEntries));
+            }
+        }
+        // =======================================================
+
         private ObservableCollection<Platform> platformsList;
         public ObservableCollection<Platform> PlatformsList
         {
@@ -42,17 +57,42 @@ namespace GGM_UWP.Views
             }
         }
 
+        private ObservableCollection<Game> gamesList;
+        public ObservableCollection<Game> GamesList
+        {
+            get { return gamesList; }
+
+            set
+            {
+                gamesList = value;
+                OnPropertyChanged(nameof(GamesList));
+            }
+        }
 
         public MainPage()
         {
             this.InitializeComponent();
+
+            // ********** must delete later **************************
+            // ********** shows the folders in future access list of operating system ************
+            IEnumerable<AccessListEntry> accessListEntries = StorageService.GetFutureAccessListEntries();
+            FutureAccessListEntries = new ObservableCollection<AccessListEntry>(accessListEntries);
+            if (!accessListEntries.Any())
+            {
+                FutureAccessListTextBlock.Text = "There is no address in future access list.";
+            }
+            else
+                FutureAccessListTextBlock.Text = "";
+            // ========================================================
+
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // ******** Getting platforms from database and put them in a public *************
-            // ******** observable collection property that binds to a list view control *****
+            // ******** Getting tables from database and put them in a public *****************
+            // ******** observable collection property that binds to list view controls *******
             PlatformsList = await DatabaseService.GetPlatforms();
+            GamesList = await DatabaseService.GetGames();
             // ********************************************************************************
 
         }
@@ -63,6 +103,51 @@ namespace GGM_UWP.Views
             a.Navigate(typeof(AllPlatformsPage));
         }
 
+        private void AddGameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void ImportGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var picker = new Windows.Storage.Pickers.FileOpenPicker();
+                picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;
+                picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+                picker.FileTypeFilter.Add(".nes");
+
+                Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+
+                if (file != null)
+                {
+                    string extension = StorageService.GetFileExtension(file);
+                    Game game = new Game() { Title = file.DisplayName, Notes = file.Path };
+                    await DatabaseService.AddGame(game);
+                    await LaunchBoxScraper.SearchGame(file.DisplayName);
+                    GamesList.Add(game);
+                    await NotificationService.DisplaySimpleMessageDialog("", file.DisplayName);
+                    // Application now has read/write access to the picked file
+                }
+                else
+                {
+                    await NotificationService.DisplaySimpleMessageDialog("", "Operation cancelled.");
+                }
+            }
+            catch (Exception error)
+            {
+                await NotificationService.DisplaySimpleMessageDialog("", error.Message);
+                throw;
+            }
+
+
+
+            // *************** delete ************************
+            FutureAccessListTextBlock.Text = "";
+            IEnumerable<AccessListEntry> accessListEntries = StorageService.GetFutureAccessListEntries();
+            FutureAccessListEntries = new ObservableCollection<AccessListEntry>(accessListEntries);
+            // ***********************************************
+        }
 
 
 
@@ -71,7 +156,15 @@ namespace GGM_UWP.Views
 
 
 
-
+        // ********** must delete later **************************
+        private async void EmptyFutureAccessList_Click(object sender, RoutedEventArgs e)
+        {
+            StorageService.EmptyFutureAccessList();
+            FutureAccessListEntries.Clear();
+            FutureAccessListTextBlock.Text = "There is no entry in the list.";
+            await NotificationService.DisplaySimpleMessageDialog("", "Future Access List is empty now!");
+        }
+        // *******************************************************
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -80,9 +173,5 @@ namespace GGM_UWP.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void AddGameButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

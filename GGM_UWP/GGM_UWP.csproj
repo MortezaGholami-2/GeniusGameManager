@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\StorageService.cs" />
     <Compile Include="Views\AllPlatformsPage.xaml.cs">
       <DependentUpon>AllPlatformsPage.xaml</DependentUpon>
     </Compile>

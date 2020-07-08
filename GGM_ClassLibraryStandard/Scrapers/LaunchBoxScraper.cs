@@ -171,7 +171,7 @@ namespace GGM_ClassLibraryStandard.Scrapers
                 // **************** Media *******************
                 platform.Media = platformDetailsNodes[10].NextSibling.NextSibling.ChildNodes[3].InnerText;
                 // ******************************************
-                
+
                 // **************** Notes *******************
                 platform.Notes = platformDetailsNodes[11].NextSibling.NextSibling.ChildNodes[3].InnerText;
                 // ******************************************
@@ -299,5 +299,60 @@ namespace GGM_ClassLibraryStandard.Scrapers
                 throw;
             }
         }
+
+        public static async Task<ObservableCollection<Game>> SearchGame(string title)
+        {
+            ObservableCollection<Game> searchResult = new ObservableCollection<Game>();
+            string path = $"https://gamesdb.launchbox-app.com/games/results?id={title}";
+            HtmlAgilityPack.HtmlDocument document = await HtmlDocumentScraper.GetHtmlDocumentByWebPageUrlAsync(path);
+
+            HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("//div[@class='col-sm-10']");
+            if (nodes.Count > 0)
+            {
+                foreach (HtmlNode searchNode in nodes)
+                {
+                    searchResult.Add(new Game()
+                    {
+                        Title = searchNode.ChildNodes[1].InnerText,
+                        Notes = searchNode.ChildNodes[5].InnerText
+                    });
+                }
+            }
+
+            //nodes = document.DocumentNode.SelectNodes("//a[@class='list-item']");
+            //if (nodes.Count > 0)
+            //{
+            //    for (int i = 0; i < nodes.Count; i++)
+            //    {
+            //        allPlatforms[i].PlatformUrl = $"https://gamesdb.launchbox-app.com{nodes[i].Attributes["href"].Value.Replace("games", "details")}";
+            //    }
+            //}
+
+            //nodes = document.DocumentNode.SelectNodes("//div[@class='col-sm-2']");
+            //if (nodes.Count > 0)
+            //{
+            //    for (int i = 0; i < nodes.Count; i++)
+            //    {
+            //        if (nodes[i].ChildNodes.Count > 1)
+            //        {
+            //            allPlatforms[i].PictureUrl = nodes[i].ChildNodes[1].Attributes["src"].Value;
+            //        }
+            //        else
+            //        {
+            //            //allPlatforms[i].PictureUrl = "";
+            //            allPlatforms[i].PictureUrl = allPlatforms[0].PictureUrl;
+            //        }
+            //    }
+            //}
+
+            return searchResult;
+        }
+    
+
+
+        //public static async Task<Game> GetGameDetails(Game selectedGame)
+        //{
+
+        //}
     }
 }
