@@ -90,6 +90,8 @@
                                 <AppBarSeparator/>
                                 <TextBlock Text="{x:Bind Title, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
                                 <AppBarSeparator/>
+                                <TextBlock Text="{x:Bind Platform, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
+                                <AppBarSeparator/>
                                 <TextBlock Text="{x:Bind Notes, Mode=OneWay}" Width="200" VerticalAlignment="Center"/>
                                 <AppBarSeparator/>
                                 <!--<CheckBox x:Name="IncludeInMovieLibraryCheckBox"

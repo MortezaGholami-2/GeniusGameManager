@@ -16,7 +16,7 @@ namespace GGM_ClassLibraryStandard.Interfaces
         //DateTime ReleaseDate { get; set; }
         //string ESRB { get; set; }
         //List<Genre> Genres { get; set; }
-        //string PlatformId { get; set; }
+        string Platform { get; set; }
         //string Developers { get; set; }
         //string Publishers { get; set; }
         //string Series { get; set; }

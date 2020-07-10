@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 
 using GGM_ClassLibraryStandard.Models;
-using Windows.Gaming.XboxLive.Storage;
+using GGM_ClassLibraryStandard.Services;
 
 namespace GGM_UWP.Services
 {
@@ -83,7 +83,8 @@ namespace GGM_UWP.Services
                         Sound = reader.GetString(9),
                         Display = reader.GetString(10),
                         Media = reader.GetString(11),
-                        Notes = reader.GetString(12)
+                        Notes = reader.GetString(12),
+                        FileType = GameService.GetPlatformFileType(reader.GetString(1))
                         //IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
                         //FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
                     });
@@ -209,8 +210,8 @@ namespace GGM_UWP.Services
                 await connection.OpenAsync();
 
                 SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) " +
-                    $"VALUES('{platform.Name}', '{platform.ReleaseDate}', '{platform.Developer}', '{platform.Manufacturer}', {platform.MaxControllers}, '{platform.Cpu}', '{platform.Memory}', '{platform.Graphics}', '{platform.Sound}', '{platform.Display}', '{platform.Media}', '{platform.Notes}')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes, FileType) " +
+                    $"VALUES('{platform.Name}', '{platform.ReleaseDate}', '{platform.Developer}', '{platform.Manufacturer}', {platform.MaxControllers}, '{platform.Cpu}', '{platform.Memory}', '{platform.Graphics}', '{platform.Sound}', '{platform.Display}', '{platform.Media}', '{platform.Notes}', '{platform.FileType}')";
                 command.ExecuteNonQuery();
             }
             catch (Exception)
@@ -311,6 +312,7 @@ namespace GGM_UWP.Services
                         //ReleaseDate = Convert.ToDateTime(reader.GetString(2)),
                         //ReleaseDate = DateTime.Now,
                         //Developer = reader.GetString(3),
+                        Platform = reader.GetString(2),
                         //Manufacturer = reader.GetString(4),
                         //MaxControllers = reader.GetInt32(5),
                         //Cpu = reader.GetString(6),
@@ -319,7 +321,7 @@ namespace GGM_UWP.Services
                         //Sound = reader.GetString(9),
                         //Display = reader.GetString(10),
                         //Media = reader.GetString(11),
-                        Notes = reader.GetString(2)
+                        Notes = reader.GetString(3)
                         //IncludeInLibrary = Convert.ToBoolean(reader.GetInt32(3)),
                         //FolderChangeTrackerEnabled = Convert.ToBoolean(reader.GetInt32(4))
                     });
@@ -340,8 +342,8 @@ namespace GGM_UWP.Services
                 await connection.OpenAsync();
 
                 SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = $"INSERT INTO Games('Title', 'Notes') " +
-                     $"VALUES('{game.Title}', '{game.Notes}')";
+                command.CommandText = $"INSERT INTO Games('Title', 'Platform', 'Notes') " +
+                     $"VALUES('{game.Title}', '{game.Platform}', '{game.Notes}')";
                      //$", '{plot}', '{Convert.ToString(releaseDate)}', {runtime})";
                 command.ExecuteNonQuery();
             }
@@ -569,7 +571,8 @@ namespace GGM_UWP.Services
                     @"Sound TEXT NOT NULL," +
                     @"Display TEXT NOT NULL," +
                     @"Media TEXT NOT NULL," +
-                    @"Notes TEXT NOT NULL)";
+                    @"Notes TEXT NOT NULL," +
+                    @"FileType TEXT NOT NULL)";
                 await command.ExecuteNonQueryAsync();
                 // ***************************************************************************
 
@@ -578,16 +581,17 @@ namespace GGM_UWP.Services
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS Games(" +
                     @"ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     @"Title TEXT NOT NULL," +
-                //    @"AlternateName TEXT NOT NULL," +
-                //    @"Platform TEXT NOT NULL," +
-                //    @"ReleaseDate TEXT NOT NULL" +
-                //    @"GameType TEXT NOT NULL" +
-                //    @"ESRB TEXT NOT NULL" +
-                //    @"Developers TEXT NOT NULL" +
-                //    @"Publishers TEXT NOT NULL" +
-                //    @"Genres TEXT NOT NULL" +
-                //    @"MaxPlayers INTEGER NOT NULL," +
-                //    @"Cooperative TEXT NOT NULL" +
+                    @"Platform TEXT NOT NULL," +
+                    //    @"AlternateName TEXT NOT NULL," +
+
+                    //    @"ReleaseDate TEXT NOT NULL" +
+                    //    @"GameType TEXT NOT NULL" +
+                    //    @"ESRB TEXT NOT NULL" +
+                    //    @"Developers TEXT NOT NULL" +
+                    //    @"Publishers TEXT NOT NULL" +
+                    //    @"Genres TEXT NOT NULL" +
+                    //    @"MaxPlayers INTEGER NOT NULL," +
+                    //    @"Cooperative TEXT NOT NULL" +
                     @"Notes TEXT NOT NULL)";
                 await command.ExecuteNonQueryAsync();
                 // ***************************************************************************
@@ -657,19 +661,19 @@ namespace GGM_UWP.Services
 
                 // ******** Create dummy data in Platforms Data Table *****************************
                 SQLiteCommand command = new SQLiteCommand(connection);
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes, FileType) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk', 'NES')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk')";
+                command.CommandText = "INSERT INTO Platforms(PlatformName, ReleaseDate, Developer, Manufacturer, MaxControllers, Cpu, Memory, Graphics, Sound, Display, Media, Notes, FileType) VALUES('mort', '', 'sdsf', 'dfsdf', 1, 'ewer', 'sdfsdfs', 'dsfsdfsdf', '424234', 'xczxczx', 'xczxc', 'ljkllkjlk', 'NES')";
                 command.ExecuteNonQuery();
                 // ***********************************************************************************
 
                 // ******** Create dummy data in Platforms Data Table *****************************
                 command = new SQLiteCommand(connection);
-                command.CommandText = "INSERT INTO Games(Title, Notes) VALUES('mort', 'fgdfg')";
+                command.CommandText = "INSERT INTO Games(Title, Platform, Notes) VALUES('mort', 'Nes', 'fgdfg')";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "INSERT INTO Games(Title, Notes) VALUES('mort', 'fgdfg')";
+                command.CommandText = "INSERT INTO Games(Title, Platform, Notes) VALUES('mort', 'Nes', 'fgdfg')";
                 command.ExecuteNonQuery();
                 // ***********************************************************************************
             }

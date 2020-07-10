@@ -81,6 +81,8 @@ namespace GGM_UWP.Views
             {
                 await DatabaseService.AddPlatform(await LaunchBoxScraper.GetPlatformDetails(SelectedPlatform));
             }
+            Frame frame = this.Frame;
+            frame.Navigate(typeof(MainPage));
         }
 
 

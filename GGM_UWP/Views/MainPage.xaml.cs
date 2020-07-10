@@ -110,6 +110,13 @@ namespace GGM_UWP.Views
 
         private async void ImportGameButton_Click(object sender, RoutedEventArgs e)
         {
+            // open file picker
+            // select the file
+            // get display name and extension of file
+            // find platform by file type
+            // search in launch box by displayname (name, platform, notes, picture)
+            // for each search result check if item.platform is equal to platform by file type
+            // if true return the item
             try
             {
                 var picker = new Windows.Storage.Pickers.FileOpenPicker();
@@ -122,12 +129,15 @@ namespace GGM_UWP.Views
                 if (file != null)
                 {
                     string extension = StorageService.GetFileExtension(file);
-                    Game game = new Game() { Title = file.DisplayName, Notes = file.Path };
+                    Game game = new Game() { Title = file.DisplayName, Platform = "", Notes = file.Path };
+                    ObservableCollection<Game> a = await LaunchBoxScraper.SearchGame(file.DisplayName);
+                    foreach (var item in a)
+                    {
+                        if(item.Platform=="Nintendo Entertainment System")
+                            await NotificationService.DisplaySimpleMessageDialog(item.Title, item.Platform);
+                    }
                     await DatabaseService.AddGame(game);
-                    await LaunchBoxScraper.SearchGame(file.DisplayName);
                     GamesList.Add(game);
-                    await NotificationService.DisplaySimpleMessageDialog("", file.DisplayName);
-                    // Application now has read/write access to the picked file
                 }
                 else
                 {

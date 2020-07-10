@@ -21,7 +21,7 @@ namespace GGM_ClassLibraryStandard.Interfaces
         string Display { get; set; }
         string Media { get; set; }
         string Notes { get; set; }
-
+        string FileType { get; set; }
         //List<MovieId> MovieId { get; set; }
         //string Title { get; set; }
         //List<Cast> Stars { get; set; }

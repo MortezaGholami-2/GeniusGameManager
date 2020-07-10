@@ -156,6 +156,18 @@ namespace GGM_ClassLibraryStandard.Models
             }
         }
 
+        private string fileType;
+        public string FileType
+        {
+            get { return fileType; }
+
+            set
+            {
+                fileType = value;
+                OnPropertyChanged(nameof(FileType));
+            }
+        }
+
 
 
 

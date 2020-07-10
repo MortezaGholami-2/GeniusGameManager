@@ -24,6 +24,41 @@ namespace GGM_ClassLibraryStandard.Models
             }
         }
 
+        private string platform;
+        public string Platform
+        {
+            get { return platform; }
+
+            set
+            {
+                platform = value;
+                OnPropertyChanged(nameof(Platform));
+            }
+        }
+
+        private string notes;
+        public string Notes
+        {
+            get { return notes; }
+
+            set
+            {
+                notes = value;
+                OnPropertyChanged(nameof(Notes));
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         private DateTime releaseDate;
         public DateTime ReleaseDate
         {
@@ -144,33 +179,11 @@ namespace GGM_ClassLibraryStandard.Models
             }
         }
 
-        private string notes;
-        public string Notes
-        {
-            get { return notes; }
-
-            set
-            {
-                notes = value;
-                OnPropertyChanged(nameof(Notes));
-            }
-        }
 
 
 
 
 
-        private string platformUrl;
-        public string PlatformUrl
-        {
-            get { return platformUrl; }
-
-            set
-            {
-                platformUrl = value;
-                OnPropertyChanged(nameof(PlatformUrl));
-            }
-        }
 
         private string pictureUrl;
         public string PictureUrl
